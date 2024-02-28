@@ -3,3 +3,7 @@ models
 texture_structure_joint
 gaussiansplatting
 threestudio
+debug*
+diff-gaussian-rasterization
+.vscode
+photoswap

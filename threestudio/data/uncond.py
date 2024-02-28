@@ -300,7 +300,16 @@ class RandomCameraIterableDataset(IterableDataset, Updateable):
     def collate(self, batch) -> Dict[str, Any]:
 
         # random head zoom-in
-        if self.cfg.enable_near_head_poses and random.random() < self.cfg.head_prob and self.cur_step >= self.cfg.head_start_step and self.cur_step <= self.cfg.head_end_step:
+        if self.cur_step >= 3600:
+            zoom_in_head = True
+            zoom_in_back = False
+            camera_distance_range = [0.4, 0.4]
+            self.azimuth_range = [90,90]
+            self.elevation_range=[0,0]
+            self.fovy_range = [40, 40]
+            self.cfg.light_distance_range = [1.0, 1.0]
+        
+        elif self.cfg.enable_near_head_poses and random.random() < self.cfg.head_prob and self.cur_step >= self.cfg.head_start_step and self.cur_step <= self.cfg.head_end_step:
             zoom_in_head = True
             zoom_in_back = False
             camera_distance_range = self.head_camera_distance_range
