@@ -21,6 +21,11 @@ from threestudio.utils.typing import *
 from torchvision import transforms
 from PIL import Image
 
+from diffusers import StableDiffusionPipeline, StableDiffusionImg2ImgPipeline, StableDiffusionInpaintPipelineLegacy, DDIMScheduler, AutoencoderKL
+import IPAdapter
+from IPAdapter.ip_adapter import IPAdapter
+import os
+
 rgb_mean=0.14654
 rgb_std=1.03744
 whole_mean=-0.2481
@@ -45,6 +50,9 @@ def rescale_noise_cfg(noise_cfg, noise_pred_text, guidance_rescale=0.0):
 class StableDiffusionGuidance(BaseObject):
     @dataclass
     class Config(BaseObject.Config):
+        input_face: str = "xxx"
+        target_face: Optional[Any] = None
+        face_start: int = 0
         pretrained_model_name_or_path: str = "stabilityai/stable-diffusion-2-base"
         enable_memory_efficient_attention: bool = False
         enable_sequential_cpu_offload: bool = False
@@ -774,7 +782,7 @@ class StableDiffusionGuidance(BaseObject):
             midas_depth_latents = (midas_depth_latents - depth_mean) / depth_std * rgb_std + rgb_mean
         
         # timestep ~ U(0.02, 0.98) to avoid very high/low noise level
-        if true_global_step > 3600:
+        if true_global_step >= self.cfg.face_start:
             self.min_step = self.max_step
         t = torch.randint(
             self.min_step,
@@ -806,22 +814,78 @@ class StableDiffusionGuidance(BaseObject):
         # SpecifyGradient is not straghtforward, use a reparameterization trick instead
         # target = (latents - grad).detach()
         target = (latents - rgb_grad).detach()
-        if true_global_step>=3600:
-            ground_truth = Image.open('/root/boy.png')
+        if true_global_step>=self.cfg.face_start:
+            toPIL = transforms.ToPILImage()
             transform = transforms.ToTensor()
+            out_dir = "./human_output/"
+
+            os.makedirs(out_dir, exist_ok=True)
+            count = len(os.listdir(out_dir))
+            
+            if self.cfg.target_face is None:
+                out_dir = os.path.join(out_dir, f"sample_{count}")
+                os.makedirs(out_dir, exist_ok=True)
+                generated_img = self.decode_latents(target)
+                pic = toPIL(generated_img[0])
+                pic.save(out_dir+'/target_source_'+str(true_global_step)+'.png')
+            
+                base_model_path = "runwayml/stable-diffusion-v1-5"
+                vae_model_path = "stabilityai/sd-vae-ft-mse"
+                image_encoder_path = "./IPAdapter/models/image_encoder/"
+                ip_ckpt = "./IPAdapter/models/ip-adapter_sd15.bin"
+                device = "cuda"
+                noise_scheduler = DDIMScheduler(
+                    num_train_timesteps=1000,
+                    beta_start=0.00085,
+                    beta_end=0.012,
+                    beta_schedule="scaled_linear",
+                    clip_sample=False,
+                    set_alpha_to_one=False,
+                    steps_offset=1,
+                )
+                vae = AutoencoderKL.from_pretrained(vae_model_path).to(dtype=torch.float16)
+                torch.cuda.empty_cache()
+                pipe = StableDiffusionInpaintPipelineLegacy.from_pretrained(
+                    base_model_path,
+                    torch_dtype=torch.float16,
+                    scheduler=noise_scheduler,
+                    vae=vae,
+                    feature_extractor=None,
+                    safety_checker=None
+                )
+                image = Image.open(self.cfg.input_face)
+                image.resize((256, 256))
+
+                
+                masked_image = toPIL(generated_img[0])
+                mask = Image.open("./IPAdapter/assets/mask.png")
+
+                # load ip-adapter
+                ip_model = IPAdapter(pipe, image_encoder_path, ip_ckpt, device)
+
+                # generate
+                images = ip_model.generate(pil_image=image, num_samples=4, num_inference_steps=50,
+                                        seed=42, image=masked_image, mask_image=mask, strength=0.7, )
+                image_result = images[3]
+                # image_result = Image.open("./IPAdapter/assets/images/girl.png")
+                image_result = image_result.convert('RGB')
+                image_result.save(out_dir+'/swap_result.jpg')
+                
+                
+                self.cfg.target_face = out_dir+'/swap_result.jpg'
+            else:
+                out_dir = os.path.join(out_dir, f"sample_{count-1}")
+            ground_truth = Image.open(self.cfg.target_face)
             tensor_image = transform(ground_truth).to(self.device)
             expanded_tensor = torch.unsqueeze(tensor_image, 0)
             repeated_tensor = expanded_tensor.repeat(batch_size, 1, 1, 1)
 
             changed_target = self.encode_images(repeated_tensor.to(self.weights_dtype))
-
-            toPIL = transforms.ToPILImage()
+            
             pic = toPIL(rgb_BCHW[0])
-            pic.save('/root/HumanGaussian/debug/target_origin_'+str(true_global_step)+'_0.jpg')
+            pic.save(out_dir+'/render_'+str(true_global_step)+'.jpg')
 
-            generated_img = self.decode_latents(target)
-            pic = toPIL(generated_img[0])
-            pic.save('/root/HumanGaussian/debug/target_decode_'+str(true_global_step)+'_0.png')
+            
             loss_sds = 0.5 * F.mse_loss(latents, changed_target, reduction="sum") / batch_size
         else:
             # d(loss)/d(latents) = latents - target = latents - (latents - grad) = grad
