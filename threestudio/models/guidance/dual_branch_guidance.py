@@ -18,6 +18,8 @@ from threestudio.utils.base import BaseObject
 from threestudio.utils.misc import C, cleanup, parse_version
 from threestudio.utils.ops import perpendicular_component
 from threestudio.utils.typing import *
+from torchvision import transforms
+from PIL import Image
 
 rgb_mean=0.14654
 rgb_std=1.03744
@@ -732,6 +734,7 @@ class StableDiffusionGuidance(BaseObject):
 
     def __call__(
         self,
+        true_global_step,
         control_images: Float[Tensor, "B H W C"],
         rgb: Float[Tensor, "B H W C"],
         depth: Float[Tensor, "B H W C"],
@@ -771,6 +774,8 @@ class StableDiffusionGuidance(BaseObject):
             midas_depth_latents = (midas_depth_latents - depth_mean) / depth_std * rgb_std + rgb_mean
         
         # timestep ~ U(0.02, 0.98) to avoid very high/low noise level
+        if true_global_step > 3600:
+            self.min_step = self.max_step
         t = torch.randint(
             self.min_step,
             self.max_step + 1,
@@ -801,8 +806,26 @@ class StableDiffusionGuidance(BaseObject):
         # SpecifyGradient is not straghtforward, use a reparameterization trick instead
         # target = (latents - grad).detach()
         target = (latents - rgb_grad).detach()
-        # d(loss)/d(latents) = latents - target = latents - (latents - grad) = grad
-        loss_sds = 0.5 * F.mse_loss(latents, target, reduction="sum") / batch_size
+        if true_global_step>=3600:
+            ground_truth = Image.open('/root/boy.png')
+            transform = transforms.ToTensor()
+            tensor_image = transform(ground_truth).to(self.device)
+            expanded_tensor = torch.unsqueeze(tensor_image, 0)
+            repeated_tensor = expanded_tensor.repeat(batch_size, 1, 1, 1)
+
+            changed_target = self.encode_images(repeated_tensor.to(self.weights_dtype))
+
+            toPIL = transforms.ToPILImage()
+            pic = toPIL(rgb_BCHW[0])
+            pic.save('/root/HumanGaussian/debug/target_origin_'+str(true_global_step)+'_0.jpg')
+
+            generated_img = self.decode_latents(target)
+            pic = toPIL(generated_img[0])
+            pic.save('/root/HumanGaussian/debug/target_decode_'+str(true_global_step)+'_0.png')
+            loss_sds = 0.5 * F.mse_loss(latents, changed_target, reduction="sum") / batch_size
+        else:
+            # d(loss)/d(latents) = latents - target = latents - (latents - grad) = grad
+            loss_sds = 0.5 * F.mse_loss(latents, target, reduction="sum") / batch_size
 
         midas_depth_target = (midas_depth_latents - midas_depth_grad).detach()
         midas_depth_sds = self.cfg.lw_depth * F.mse_loss(midas_depth_latents, midas_depth_target, reduction='sum') / batch_size
