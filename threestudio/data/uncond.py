@@ -164,6 +164,7 @@ class RandomCameraDataModuleConfig:
     # height, width, and batch_size should be Union[int, List[int]]
     # but OmegaConf does not support Union of containers
     fix_camera_start: int = 0
+    fix_camera_end: int = 0
     height: Any = 512
     width: Any = 512
     batch_size: Any = 1
@@ -301,7 +302,7 @@ class RandomCameraIterableDataset(IterableDataset, Updateable):
     def collate(self, batch) -> Dict[str, Any]:
 
         # random head zoom-in
-        if self.cur_step >= self.cfg.fix_camera_start:
+        if self.cur_step >= self.cfg.fix_camera_start and self.cur_step < self.cfg.fix_camera_end:
             zoom_in_head = True
             zoom_in_back = False
             camera_distance_range = [0.4, 0.4]

@@ -53,6 +53,7 @@ class StableDiffusionGuidance(BaseObject):
         input_face: str = "xxx"
         target_face: Optional[Any] = None
         face_start: int = 0
+        face_end: int = 0
         pretrained_model_name_or_path: str = "stabilityai/stable-diffusion-2-base"
         enable_memory_efficient_attention: bool = False
         enable_sequential_cpu_offload: bool = False
@@ -782,7 +783,7 @@ class StableDiffusionGuidance(BaseObject):
             midas_depth_latents = (midas_depth_latents - depth_mean) / depth_std * rgb_std + rgb_mean
         
         # timestep ~ U(0.02, 0.98) to avoid very high/low noise level
-        if true_global_step >= self.cfg.face_start:
+        if true_global_step >= self.cfg.face_start and true_global_step < self.cfg.face_end:
             self.min_step = self.max_step
         t = torch.randint(
             self.min_step,
@@ -814,8 +815,10 @@ class StableDiffusionGuidance(BaseObject):
         # SpecifyGradient is not straghtforward, use a reparameterization trick instead
         # target = (latents - grad).detach()
         target = (latents - rgb_grad).detach()
-        if true_global_step>=self.cfg.face_start:
-            toPIL = transforms.ToPILImage()
+        generated_img = self.decode_latents(target)
+        toPIL = transforms.ToPILImage()
+        if true_global_step>=self.cfg.face_start and true_global_step < self.cfg.face_end:
+            
             transform = transforms.ToTensor()
             out_dir = "./human_output/"
 
@@ -825,7 +828,7 @@ class StableDiffusionGuidance(BaseObject):
             if self.cfg.target_face is None:
                 out_dir = os.path.join(out_dir, f"sample_{count}")
                 os.makedirs(out_dir, exist_ok=True)
-                generated_img = self.decode_latents(target)
+                
                 pic = toPIL(generated_img[0])
                 pic.save(out_dir+'/target_source_'+str(true_global_step)+'.png')
             
@@ -867,7 +870,7 @@ class StableDiffusionGuidance(BaseObject):
                 images = ip_model.generate(pil_image=image, num_samples=4, num_inference_steps=50,
                                         seed=42, image=masked_image, mask_image=mask, strength=0.7, )
                 image_result = images[3]
-                # image_result = Image.open("./IPAdapter/assets/images/girl.png")
+                # image_result = Image.open("./IPAdapter/result3.png")
                 image_result = image_result.convert('RGB')
                 image_result.save(out_dir+'/swap_result.jpg')
                 
@@ -884,10 +887,14 @@ class StableDiffusionGuidance(BaseObject):
             
             pic = toPIL(rgb_BCHW[0])
             pic.save(out_dir+'/render_'+str(true_global_step)+'.jpg')
-
+            pic2 = toPIL(generated_img[0])
+            pic2.save(out_dir+'/target_'+str(true_global_step)+'.png')
             
             loss_sds = 0.5 * F.mse_loss(latents, changed_target, reduction="sum") / batch_size
         else:
+            if true_global_step > 3100 and true_global_step % 10 == 0:
+                pic = toPIL(generated_img[0])
+                pic.save('./debug/target_'+str(true_global_step)+'.png')
             # d(loss)/d(latents) = latents - target = latents - (latents - grad) = grad
             loss_sds = 0.5 * F.mse_loss(latents, target, reduction="sum") / batch_size
 
