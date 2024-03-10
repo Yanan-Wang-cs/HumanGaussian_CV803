@@ -306,7 +306,9 @@ class RandomCameraIterableDataset(IterableDataset, Updateable):
             zoom_in_head = True
             zoom_in_back = False
             camera_distance_range = [0.4, 0.4]
-            self.azimuth_range = [90,90]
+            angle_range = [0, 30, 60, 90, 120, 150, 180]
+            azimuth_angle = random.choice(angle_range)
+            self.azimuth_range = [azimuth_angle,azimuth_angle]
             self.elevation_range=[0,0]
             self.fovy_range = [40, 40]
             self.cfg.light_distance_range = [1.0, 1.0]

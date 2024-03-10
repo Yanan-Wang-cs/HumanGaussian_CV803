@@ -828,9 +828,11 @@ class StableDiffusionGuidance(BaseObject):
             if self.cfg.target_face is None:
                 out_dir = os.path.join(out_dir, f"sample_{count}")
                 os.makedirs(out_dir, exist_ok=True)
-                
+            else:
+                out_dir = os.path.join(out_dir, f"sample_{count-1}")
+            if not os.path.exists(out_dir+'/target_source_'+str(int(azimuth.item()))+'.png'):
                 pic = toPIL(generated_img[0])
-                pic.save(out_dir+'/target_source_'+str(true_global_step)+'.png')
+                pic.save(out_dir+'/target_source_'+str(int(azimuth.item()))+'.png')
             
                 base_model_path = "runwayml/stable-diffusion-v1-5"
                 vae_model_path = "stabilityai/sd-vae-ft-mse"
@@ -872,12 +874,11 @@ class StableDiffusionGuidance(BaseObject):
                 image_result = images[3]
                 # image_result = Image.open("./IPAdapter/result3.png")
                 image_result = image_result.convert('RGB')
-                image_result.save(out_dir+'/swap_result.jpg')
+                image_result.save(out_dir+'/swap_result_'+str(int(azimuth.item()))+'.jpg')
                 
                 
-                self.cfg.target_face = out_dir+'/swap_result.jpg'
-            else:
-                out_dir = os.path.join(out_dir, f"sample_{count-1}")
+                self.cfg.target_face = out_dir+'/swap_result_'+str(int(azimuth.item()))+'.jpg'
+            
             ground_truth = Image.open(self.cfg.target_face)
             tensor_image = transform(ground_truth).to(self.device)
             expanded_tensor = torch.unsqueeze(tensor_image, 0)
