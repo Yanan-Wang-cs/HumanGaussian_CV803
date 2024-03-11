@@ -303,12 +303,17 @@ class RandomCameraIterableDataset(IterableDataset, Updateable):
 
         # random head zoom-in
         if self.cur_step >= self.cfg.fix_camera_start and self.cur_step < self.cfg.fix_camera_end:
-            zoom_in_head = True
-            zoom_in_back = False
+            
             camera_distance_range = [0.4, 0.4]
-            angle_range = [0, 30, 60, 90, 120, 150, 180]
+            angle_range = [-30, -60, -90, -120, -150, 30, 60, 90, 120, 150]
             azimuth_angle = random.choice(angle_range)
             self.azimuth_range = [azimuth_angle,azimuth_angle]
+            if azimuth_angle > 0:
+                zoom_in_head = True
+                zoom_in_back = False
+            else:
+                zoom_in_head = False
+                zoom_in_back = True
             self.elevation_range=[0,0]
             self.fovy_range = [40, 40]
             self.cfg.light_distance_range = [1.0, 1.0]

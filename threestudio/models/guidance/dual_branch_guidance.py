@@ -817,7 +817,7 @@ class StableDiffusionGuidance(BaseObject):
         target = (latents - rgb_grad).detach()
         generated_img = self.decode_latents(target)
         toPIL = transforms.ToPILImage()
-        if true_global_step>=self.cfg.face_start and true_global_step < self.cfg.face_end:
+        if true_global_step>=self.cfg.face_start and true_global_step < self.cfg.face_end and azimuth.item() > 0:
             
             transform = transforms.ToTensor()
             out_dir = "./human_output/"
@@ -863,7 +863,7 @@ class StableDiffusionGuidance(BaseObject):
 
                 
                 masked_image = toPIL(generated_img[0])
-                mask = Image.open("./IPAdapter/assets/mask.png")
+                mask = Image.open("./IPAdapter/assets/mask_"+str(int(azimuth.item()))+".png")
 
                 # load ip-adapter
                 ip_model = IPAdapter(pipe, image_encoder_path, ip_ckpt, device)
@@ -886,10 +886,10 @@ class StableDiffusionGuidance(BaseObject):
 
             changed_target = self.encode_images(repeated_tensor.to(self.weights_dtype))
             
-            pic = toPIL(rgb_BCHW[0])
-            pic.save(out_dir+'/render_'+str(true_global_step)+'.jpg')
-            pic2 = toPIL(generated_img[0])
-            pic2.save(out_dir+'/target_'+str(true_global_step)+'.png')
+            # pic = toPIL(rgb_BCHW[0])
+            # pic.save(out_dir+'/render_'+str(true_global_step)+'.jpg')
+            # pic2 = toPIL(generated_img[0])
+            # pic2.save(out_dir+'/target_'+str(true_global_step)+'.png')
             
             loss_sds = 0.5 * F.mse_loss(latents, changed_target, reduction="sum") / batch_size
         else:
