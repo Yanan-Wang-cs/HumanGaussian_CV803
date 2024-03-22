@@ -98,7 +98,8 @@ def main(args, extras) -> None:
     # parse YAML config to OmegaConf
     cfg: ExperimentConfig
     cfg = load_config(args.config, cli_args=extras, n_gpus=n_gpus)
-
+    print("!!!!!!", args.face)
+    cfg.system.guidance.input_face = args.face
     # set a different seed for each device
     pl.seed_everything(cfg.seed + get_rank(), workers=True)
 
@@ -214,7 +215,7 @@ if __name__ == "__main__":
     group.add_argument("--validate", action="store_true")
     group.add_argument("--test", action="store_true")
     group.add_argument("--export", action="store_true")
-
+    parser.add_argument("--face", default="./IPAdapter/assets/images/girl.png")
     parser.add_argument(
         "--gradio", action="store_true", help="if true, run in gradio mode"
     )
