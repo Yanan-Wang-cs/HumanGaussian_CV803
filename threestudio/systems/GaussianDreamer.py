@@ -26,6 +26,7 @@ from PIL import Image
 
 from threestudio.utils.poser import Skeleton
 import torch.nn.functional as F
+from torchvision import transforms
 
 def load_ply(path,save_path):
     C0 = 0.28209479177387814
@@ -249,6 +250,9 @@ class GaussianDreamer(BaseLift3DSystem):
             image, viewspace_point_tensor, radii = render_pkg["render"], render_pkg["viewspace_points"], render_pkg["radii"]
             self.viewspace_point_list.append(viewspace_point_tensor)
 
+            toPIL = transforms.ToPILImage()
+            # pic = toPIL(image)
+            # pic.save('/home/yanan/cv/second/HumanGaussian/debug/rgba'+str(self.true_current_epoch)+'_'+str(self.true_global_step)+'_'+str(id)+'.jpg')
             # manually accumulate max radii across batch
             if id == 0:
                 self.radii = radii
@@ -256,7 +260,7 @@ class GaussianDreamer(BaseLift3DSystem):
                 self.radii = torch.max(radii, self.radii)
                 
             depth = render_pkg["depth_3dgs"]
-
+            # toPIL(torch.squeeze(depth.clamp(0, 1))).save('/home/yanan/cv/second/HumanGaussian/debug/depth'+str(self.true_current_epoch)+'_'+str(self.true_global_step)+'_'+str(id)+'.jpg')
             # import kiui
             # kiui.vis.plot_image(image)
 
@@ -271,6 +275,7 @@ class GaussianDreamer(BaseLift3DSystem):
                 pose_image, _ = self.skel.humansd_draw(mvp, 512, 512, backview) # [512, 512, 3], fixed pose image resolution
                 # kiui.vis.plot_image(pose_image)
                 pose_image = torch.from_numpy(pose_image).to(self.device) # [H, W, 3]
+                # toPIL(pose_image.permute(2, 0, 1)).save('/home/yanan/cv/second/HumanGaussian/debug/pose'+str(self.true_current_epoch)+'_'+str(self.true_global_step)+'_'+str(id)+'.jpg')
                 pose_images.append(pose_image)
             else:
                 # render pose image
@@ -337,17 +342,17 @@ class GaussianDreamer(BaseLift3DSystem):
         guidance_eval = False
         
         if self.texture_structure_joint:
-            guidance_out = self.guidance(
+            guidance_out = self.guidance(self.true_global_step,
                 control_images, images, depth_images, prompt_utils, **batch, 
                 rgb_as_latents=False, guidance_eval=guidance_eval
             )
         elif self.controlnet:
-            guidance_out = self.guidance(
+            guidance_out = self.guidance(self.true_global_step,
                 control_images, images, prompt_utils, **batch, 
                 rgb_as_latents=False, guidance_eval=guidance_eval
             )
         else:
-            guidance_out = self.guidance(
+            guidance_out = self.guidance(self.true_global_step,
                 images, prompt_utils, **batch, 
                 rgb_as_latents=False, guidance_eval=guidance_eval
             )
