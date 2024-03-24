@@ -1,0 +1,1 @@
+python launch.py --config configs/test.yaml --train system.prompt_processor.prompt="A boy with a beanie wearing a hoodie and joggers and with a bag in his hand"
