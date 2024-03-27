@@ -163,6 +163,8 @@ def convert_camera_pose(camera_pose):
 class RandomCameraDataModuleConfig:
     # height, width, and batch_size should be Union[int, List[int]]
     # but OmegaConf does not support Union of containers
+    fix_camera_start: int = 0
+    fix_camera_end: int = 0
     height: Any = 512
     width: Any = 512
     batch_size: Any = 1
@@ -300,7 +302,36 @@ class RandomCameraIterableDataset(IterableDataset, Updateable):
     def collate(self, batch) -> Dict[str, Any]:
 
         # random head zoom-in
-        if self.cfg.enable_near_head_poses and random.random() < self.cfg.head_prob and self.cur_step >= self.cfg.head_start_step and self.cur_step <= self.cfg.head_end_step:
+        if self.cur_step >= self.cfg.fix_camera_start-2 and self.cur_step < self.cfg.fix_camera_end:
+            
+            camera_distance_range = [0.4, 0.4]
+            # angle_range = [-30, -60, -90, -120, -150, 60, 90, 90, 90, 90, 90, 90, 120]
+            angle_range = [60, 90, 120]
+            # azimuth_angle = random.choice(angle_range)
+            # if (self.cur_step - self.cfg.fix_camera_start) < 70:
+            #     azimuth_angle = 30
+            # if (self.cur_step - self.cfg.fix_camera_start) < -1:
+            #     azimuth_angle = 60
+            # elif (self.cur_step - self.cfg.fix_camera_start) < 100:
+            #     azimuth_angle = 120
+            # # elif (self.cur_step - self.cfg.fix_camera_start) < 280:
+            # #     azimuth_angle = 150
+            # else:
+            #     azimuth_angle = 90
+            self.azimuth_range = [90,90]
+            zoom_in_head = True
+            zoom_in_back = False
+            # if azimuth_angle > 0:
+            #     zoom_in_head = True
+            #     zoom_in_back = False
+            # else:
+            #     zoom_in_head = False
+            #     zoom_in_back = True
+            self.elevation_range=[0,0]
+            self.fovy_range = [40, 40]
+            self.cfg.light_distance_range = [1.0, 1.0]
+        
+        elif self.cfg.enable_near_head_poses and random.random() < self.cfg.head_prob and self.cur_step >= self.cfg.head_start_step and self.cur_step <= self.cfg.head_end_step:
             zoom_in_head = True
             zoom_in_back = False
             camera_distance_range = self.head_camera_distance_range
