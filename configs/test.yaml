@@ -101,7 +101,7 @@ system:
       eps: 1.e-15
 
 trainer:
-  max_steps: 3800
+  max_steps: 4000
   log_every_n_steps: 1
   num_sanity_val_steps: 0
   val_check_interval: 100

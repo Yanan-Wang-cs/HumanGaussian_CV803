@@ -893,9 +893,9 @@ class StableDiffusionGuidance(BaseObject):
             
             loss_sds = 0.5 * F.mse_loss(latents, changed_target, reduction="sum") / batch_size
         else:
-            if true_global_step > 3100 and true_global_step % 10 == 0:
-                pic = toPIL(generated_img[0])
-                pic.save('./debug/target_'+str(true_global_step)+'.png')
+            # if true_global_step > 3100 and true_global_step % 10 == 0:
+            #     pic = toPIL(generated_img[0])
+            #     pic.save('./debug/target_'+str(true_global_step)+'.png')
             # d(loss)/d(latents) = latents - target = latents - (latents - grad) = grad
             loss_sds = 0.5 * F.mse_loss(latents, target, reduction="sum") / batch_size
 

@@ -308,14 +308,14 @@ class RandomCameraIterableDataset(IterableDataset, Updateable):
             # angle_range = [-30, -60, -90, -120, -150, 60, 90, 90, 90, 90, 90, 90, 120]
             angle_range = [60, 90, 120]
             # azimuth_angle = random.choice(angle_range)
-            # if (self.cur_step - self.cfg.fix_camera_start) < 70:
-            #     azimuth_angle = 30
-            if (self.cur_step - self.cfg.fix_camera_start) < -1:
+            if (self.cur_step - self.cfg.fix_camera_start) < 50:
+                azimuth_angle = 30
+            if (self.cur_step - self.cfg.fix_camera_start) < 150:
                 azimuth_angle = 60
-            elif (self.cur_step - self.cfg.fix_camera_start) < 100:
+            elif (self.cur_step - self.cfg.fix_camera_start) < 250:
                 azimuth_angle = 120
-            # elif (self.cur_step - self.cfg.fix_camera_start) < 280:
-            #     azimuth_angle = 150
+            elif (self.cur_step - self.cfg.fix_camera_start) < 300:
+                azimuth_angle = 150
             else:
                 azimuth_angle = 90
             self.azimuth_range = [azimuth_angle,azimuth_angle]
