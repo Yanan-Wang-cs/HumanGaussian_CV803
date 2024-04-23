@@ -88,7 +88,7 @@ sh train.sh
 <p align="center">
    <img src="Images/QET3D-Results.png"  alt="PanFPPL" width="800" height="250" style="margin-right: 2px;" />
    <be>
-   <h6> <em> Figure 3. The QET3D Pipeline Results. </em> </h6>
+   <h6> <em> Figure 3. The PGT3D Pipeline Results. </em> </h6>
 </p>
 
   
