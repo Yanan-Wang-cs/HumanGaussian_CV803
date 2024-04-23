@@ -65,7 +65,7 @@ pip3 install -r requirements.txt
 
 - Download the library and model from following links and extract them under the folder HumanGaussian:
      - [IPAdapter](https://mbzuaiac-my.sharepoint.com/:u:/g/personal/yanan_wang_mbzuai_ac_ae/EcqJP9iV3TNOuMmik3LeIiABrZ3oc-jBxd2msETxWqVzPA?e=hKbtsH)
-     - [Model] https://mbzuaiac-my.sharepoint.com/:u:/g/personal/yanan_wang_mbzuai_ac_ae/EZtICTpr2bFHiqNmyQjfrV8BhKfaHyd7kHZVJcIS7eFWxg?e=SxUZpz
+     - [Model] (https://mbzuaiac-my.sharepoint.com/:u:/g/personal/yanan_wang_mbzuai_ac_ae/EZtICTpr2bFHiqNmyQjfrV8BhKfaHyd7kHZVJcIS7eFWxg?e=SxUZpz)
      - [Texture-Structure Joint](https://mbzuaiac-my.sharepoint.com/:u:/g/personal/yanan_wang_mbzuai_ac_ae/EfF79lcejKZCnVCJq_98MhYBzKdSEZSLo5SsRXo1mrXlVg?e=KjSOp2)
 
 
