@@ -104,7 +104,13 @@ HumanGaussian:
     year={2023}
 }
 
-
+IP-Adapter:
+@article{ye2023ip,
+  title={Ip-adapter: Text compatible image prompt adapter for text-to-image diffusion models},
+  author={Ye, Hu and Zhang, Jun and Liu, Sibo and Han, Xiao and Yang, Wei},
+  journal={arXiv preprint arXiv:2308.06721},
+  year={2023}
+}
 
 
 
