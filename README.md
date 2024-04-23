@@ -111,8 +111,3 @@ IP-Adapter:
   journal={arXiv preprint arXiv:2308.06721},
   year={2023}
 }
-
-
-
-
-
