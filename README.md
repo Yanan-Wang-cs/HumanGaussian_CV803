@@ -12,7 +12,7 @@ ___________________________________________
  <em> The surge in virtual and augmented reality over the last decade has catalyzed a growing interest in 3D object generation. Recent years have unveiled visual-language models adept at crafting 3D objects from textual descriptions. Yet, these existing approaches falter in creating high-fidelity, human-like avatars, especially in replicating the subtleties of facial details and expressions. The introduction of 3D Gaussian splatting (3DGS) made strides in rendering character limbs but did not achieve the desired level of facial realism. We present the Personalized Generation for Text-to-3D Human (PGT3D) model to surmount these challenges. This approach merges textual prompts, specific poses, and guiding facial images to forge personalized, lifelike 3D avatars, viewable from multiple perspectives and surpassing current models' facial accuracy and expression. Our evaluations reveal that PGT3D excels beyond state-of-the-art models in depicting intricate facial features, marking a pivotal progression towards crafting expressive human avatars from text and portraits and elevating realism in digital realms.   </em> 
 
 
-## General PGT3D Pipeline:
+## General PGT3D Pillars:
 <p align="center">
    <img src=""  alt="PanFPPL" width="600" height="250" style="margin-right: 2px;" />
    <be>
@@ -99,6 +99,15 @@ textual prompt.</em></h6>
    <be>
    <h6> <em> Figure 4. PGT3D results. 1st column) the textual prompt 1. 2nd column) the Baseline HumnanGaussian (HG) result. 3rd column) the input image for avatar personalization for textual prompts 1 and 2. 4th column) the PGT3D (ours) result. 5th column) the textual prompt 2. 6th column) the PGT3D (ours) result. 7th column) the Baseline HumnanGaussian (HG) result. </em> </h6>
 </p>
+
+## User Feedback results 
+
+<p align="center">
+   <img src="Images/Favoring.png"  alt="PanFPPL" width="600" height="200" style="margin-right: 2px;" />
+   <be>
+   <h6> <em> Figure 5. Average feedback (%) for favoring PGT3D transfer in terms of similarities and dissimilarities. </em> </h6>
+</p>
+
 
 
   
