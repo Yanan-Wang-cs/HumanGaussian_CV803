@@ -103,7 +103,7 @@ textual prompt.</em></h6>
 ## User Feedback results 
 
 <p align="center">
-   <img src="Images/Favoring.png"  alt="PanFPPL" width="600" height="200" style="margin-right: 2px;" />
+   <img src="Images/Favoring.png"  alt="PanFPPL" width="400" height="300" style="margin-right: 2px;" />
    <be>
    <h6> <em> Figure 5. Average feedback (%) for favoring PGT3D transfer in terms of similarities and dissimilarities. </em> </h6>
 </p>
