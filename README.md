@@ -25,7 +25,7 @@ the IP-Adapter takes the face output of the previous stage with a specific portr
 PGT3D is a cutting-edge pipeline designed for generating personalized digital humans, focusing on enhanced facial feature customization. It leverages face swap techniques to produce avatars with unique facial traits, significantly outperforming traditional models. Through qualitative evaluations, PGT3D has proven to enhance facial personalization with notably smooth transitions, achieving over 88% in evaluations. This technology is particularly suited for creating customized digital humans in virtual reality applications, improving realism and expressiveness in immersive environments. PGT3D represents a significant advancement in open-source 3D avatar generation, catering to the growing needs for high-fidelity, human-like avatars in virtual and augmented reality settings.
 The below figure illustrates the PGT3D pillars. 
 <p align="center">
-   <img src="Images/PGT3D-Ing.png" width="280" height="300" style="margin-right: 2px;" />
+   <img src="Images/PGT3D-Ing.png" width="300" height="300" style="margin-right: 2px;" />
    <be>
    <h6> <em> Figure 2. PGT3D Pillars. </em> </h6>
 </p>
