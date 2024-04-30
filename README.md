@@ -86,7 +86,7 @@ sh train.sh
 
 ## Visualization 
 <p align="center">
-   <img src="Images/im1.png"  alt="PanFPPL" width="700" height="500" style="margin-right: 2px;" />
+   <img src="Images/im1.png"  alt="PanFPPL" width="720" height="500" style="margin-right: 2px;" />
    <br>
   <h6> <em> Figure 3. PGT3D results. 1st column) the textual prompt for the entire row. 2nd column) the Baseline HumnanGaussian (HG) result. 3rd column) Example 1 of the input image for avatar
 personalization. 4th column) the PGT3D (ours) result. 5th column) Example 2 of the input image for avatar personalization. 6th column) the PGT3D (ours) result. Every row represents a different
