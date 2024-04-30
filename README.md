@@ -12,24 +12,22 @@ ___________________________________________
  <em> The surge in virtual and augmented reality over the last decade has catalyzed a growing interest in 3D object generation. Recent years have unveiled visual-language models adept at crafting 3D objects from textual descriptions. Yet, these existing approaches falter in creating high-fidelity, human-like avatars, especially in replicating the subtleties of facial details and expressions. The introduction of 3D Gaussian splatting (3DGS) made strides in rendering character limbs but did not achieve the desired level of facial realism. We present the Personalized Generation for Text-to-3D Human (PGT3D) model to surmount these challenges. This approach merges textual prompts, specific poses, and guiding facial images to forge personalized, lifelike 3D avatars, viewable from multiple perspectives and surpassing current models' facial accuracy and expression. Our evaluations reveal that PGT3D excels beyond state-of-the-art models in depicting intricate facial features, marking a pivotal progression towards crafting expressive human avatars from text and portraits and elevating realism in digital realms.   </em> 
 
 
-## General PGT3D Pillars:
-<p align="center">
-   <img src=""  alt="PanFPPL" width="600" height="250" style="margin-right: 2px;" />
-   <be>
-   <h6> <em> Figure 1. Here. </em> </h6>
-</p>
-
-
-## Detailes PGT3D Framework:
+## PGT3D Framework:
 <p align="center">
    <img src="Images/PGT3D.png"  alt="PanFPPL" width="700" height="350" style="margin-right: 2px;" />
    <be>
-   <h6> <em> Figure 2. PGT3D Pipeline. In the first stage: the Texture-Structure joint model accepts a textual prompt and the required avatar pose, and it generates the depth map and initial character face. Then,
+   <h6> <em> Figure 1. PGT3D Pipeline. In the first stage: the Texture-Structure joint model accepts a textual prompt and the required avatar pose, and it generates the depth map and initial character face. Then,
 the IP-Adapter takes the face output of the previous stage with a specific portrait as an image prompt and generates the personalized avatar.</em> </h6>
 </p>
 
 
 ## Description 
+
+<p align="center">
+   <img src=""  alt="Images/PGT3D-Ing.png" width="600" height="250" style="margin-right: 2px;" />
+   <be>
+   <h6> <em> Figure 2. Here. </em> </h6>
+</p>
 
 
 ## Our Contributions
