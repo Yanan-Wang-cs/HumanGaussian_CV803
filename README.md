@@ -101,7 +101,7 @@ textual prompt.</em></h6>
 </p>
 
 ## User Feedback results 
-
+We conducted a detailed user study to evaluate the effectiveness of our approach, involving 60 participants of MBZUAI students, research assistants, and post-docs who assessed our results based on six key attributes: 1) Similarity, 2) Dissimilarity, 3) Personalized features, 4) Smoothness, 5) Complex details (glasses, hat/ hoodie/ messy hair, beard), and 6) Model success. The average of participants' votes favoring PGT3D are depicted in Figure 5. 
 <p align="center">
    <img src="Images/Favoring.png"  alt="PanFPPL" width="400" height="300" style="margin-right: 2px;" />
    <be>
