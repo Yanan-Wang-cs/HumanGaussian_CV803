@@ -22,9 +22,10 @@ ___________________________________________
 
 ## Detailes PGT3D Framework:
 <p align="center">
-   <img src=""  alt="PanFPPL" width="1000" height="380" style="margin-right: 2px;" />
-   <br>
-  <h6> <em> Figure 2. The QET3D Framework: Following HumanGaussina, our process initiates with an SMPL-X mesh and progresses towards the generation of the Pruned Gaussians, followed by the creation of a pose skeleton. This is accompanied by the generation of rendered RGB images "x" and rendered depth images "d". The texture-structure joint model accepts textual-visual inputs, which are represented by the noisy versions of "x<sub>t</sub>" and "d<sub>t</sub>", corresponding to "x" and "d", respectively, guided by a specific prompt. The blurred RGB image produced as a result serves as the input for CodeFormer, which then restores the image to produce "I<sub>Restored</sub>". This restored image and the rendered image "I<sub>Rendered</sub>", originating from the Rendered RGB "x" branch, are subsequently evaluated using the MSE Loss function. The Framework outputs a QET3D character refined in geometry and face features. </em></h6>
+   <img src="Images/PGT3D.png"  alt="PanFPPL" width="700" height="350" style="margin-right: 2px;" />
+   <be>
+   <h6> <em> Figure 2. PGT3D Pipeline. In the first stage: the Texture-Structure joint model accepts a textual prompt and the required avatar pose, and it generates the depth map and initial character face. Then,
+the IP-Adapter takes the face output of the previous stage with a specific portrait as an image prompt and generates the personalized avatar.</em> </h6>
 </p>
 
 
@@ -86,10 +87,19 @@ sh train.sh
 
 ## Visualization 
 <p align="center">
-   <img src="Images/QET3D-Results.png"  alt="PanFPPL" width="800" height="250" style="margin-right: 2px;" />
-   <be>
-   <h6> <em> Figure 3. The PGT3D Pipeline Results. </em> </h6>
+   <img src="Images/im1.png"  alt="PanFPPL" width="700" height="500" style="margin-right: 2px;" />
+   <br>
+  <h6> <em> Figure 3. PGT3D results. 1st column) the textual prompt for the entire row. 2nd column) the Baseline HumnanGaussian (HG) result. 3rd column) Example 1 of the input image for avatar
+personalization. 4th column) the PGT3D (ours) result. 5th column) Example 2 of the input image for avatar personalization. 6th column) the PGT3D (ours) result. Every row represents a different
+textual prompt.</em></h6>
 </p>
+
+<p align="center">
+   <img src="Images/im2.png"  alt="PanFPPL" width="650" height="250" style="margin-right: 2px;" />
+   <be>
+   <h6> <em> Figure 4. PGT3D results. 1st column) the textual prompt 1. 2nd column) the Baseline HumnanGaussian (HG) result. 3rd column) the input image for avatar personalization for textual prompts 1 and 2. 4th column) the PGT3D (ours) result. 5th column) the textual prompt 2. 6th column) the PGT3D (ours) result. 7th column) the Baseline HumnanGaussian (HG) result. </em> </h6>
+</p>
+
 
   
 ## Acknowledgement
