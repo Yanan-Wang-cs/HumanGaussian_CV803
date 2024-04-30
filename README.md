@@ -24,7 +24,7 @@ the IP-Adapter takes the face output of the previous stage with a specific portr
 ## Description 
 
 <p align="center">
-   <img src="Images/PGT3D-Ing.png" width="600" height="250" style="margin-right: 2px;" />
+   <img src="Images/PGT3D-Ing.png" width="400" height="300" style="margin-right: 2px;" />
    <be>
    <h6> <em> Figure 2. Here. </em> </h6>
 </p>
