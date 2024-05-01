@@ -37,6 +37,8 @@ We can summarize our contributions as follows:
   - Crafting personalized characters of high quality, infused with fine-grained details.
   - Establishing new benchmarks in the realm of digital human generation.
 ## News
+[2024-04-30] Visual results and user feedback are available!
+<br>
 [2024-04-16] Code is available!
 <br>
 [2024-03-31] Initiating the repository, and uploading the project proposed pipeline. 
