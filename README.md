@@ -1,4 +1,4 @@
-# CV803 - PGT3D: Personalized Personalized Generation for Text-to-3D Human
+# CV803 - PGT3D: Personalized Generation for Text-to-3D Human
 
 Project for the CV803 - Advanced CV course - April 2024.
 <br>
