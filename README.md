@@ -14,7 +14,7 @@ ___________________________________________
 
 ## PGT3D Framework:
 <p align="center">
-   <img src="Images/PGT3D.png"  alt="PanFPPL" width="700" height="350" style="margin-right: 2px;" />
+   <img src="Images/PGT3D.pdf"  alt="PanFPPL" width="700" height="350" style="margin-right: 2px;" />
    <be>
    <h6> <em> Figure 1. PGT3D Pipeline. In the first stage: the Texture-Structure joint model accepts a textual prompt and the required avatar pose, and it generates the depth map and initial character face. Then,
 the IP-Adapter takes the face output of the previous stage with a specific portrait as an image prompt and generates the personalized avatar.</em> </h6>
